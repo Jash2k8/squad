@@ -8,7 +8,6 @@ import {
   ArrowUpRight,
   CalendarDays,
   Check,
-  ChevronRight,
   Code2,
   Cpu,
   Lightbulb,
@@ -33,6 +32,8 @@ const details = [
   ["Team information", "Details coming soon"],
   ["Eligibility", "Details coming soon"],
 ]
+
+const REGISTRATION_URL = "https://docs.google.com/forms/d/e/1FAIpQLSdEhGbGh5B1Rd3HfBe0VFcYYeYeUwcGvBx6rjEqrK2ORJFRlQ/viewform?pli=1"
 
 function IntroSequence({ onComplete }: { onComplete: () => void }) {
   const [phase, setPhase] = useState<"access" | "ready" | "reveal" | "zoom">("access")
@@ -77,10 +78,10 @@ function IntroSequence({ onComplete }: { onComplete: () => void }) {
             {(phase === "reveal" || phase === "zoom") && "CODEX 2.0 // INTERFACE UNLOCKED"}
           </motion.span>
         </div>
-        <motion.img
-          src="/codex-2-logo.png"
-          alt="CODEX 2.0"
-          className="codex-intro-logo relative w-[min(76vw,760px)] object-contain"
+        <motion.div
+          role="img"
+          aria-label="CODEX 2.0"
+          className="codex-intro-logo relative whitespace-nowrap text-[clamp(3rem,12vw,10rem)] font-black uppercase leading-none tracking-[-0.09em] text-white"
           animate={{
             scale: phase === "zoom" ? 7 : phase === "reveal" ? 1.1 : 0.64,
             opacity: phase === "access" ? 0.18 : 1,
@@ -93,7 +94,7 @@ function IntroSequence({ onComplete }: { onComplete: () => void }) {
             opacity: { duration: 0.6 },
             filter: { duration: 0.8 },
           }}
-        />
+        >CODEX 2.0</motion.div>
         <motion.div
           className="mt-10 flex items-center gap-3 text-[9px] font-mono uppercase tracking-[0.28em] text-white/35"
           animate={{ opacity: phase === "access" ? 0 : 1 }}
@@ -109,6 +110,8 @@ function IntroSequence({ onComplete }: { onComplete: () => void }) {
 
 export function OngoingEventsPage() {
   const [introComplete, setIntroComplete] = useState(false)
+  const [registrationStarted, setRegistrationStarted] = useState(false)
+  const [alreadyRegistered, setAlreadyRegistered] = useState(false)
 
   return (
     <>
@@ -125,7 +128,7 @@ export function OngoingEventsPage() {
               </div>
               <h1 className="max-w-3xl text-6xl font-black uppercase leading-[0.87] tracking-[-0.07em] text-white sm:text-8xl lg:text-[clamp(5rem,9vw,9.2rem)]">
                 <span className="block">Where ideas</span>
-                <span className="block text-transparent [background:linear-gradient(110deg,#67e8f9,#60a5fa_45%,#fff)] bg-clip-text">turn into</span>
+                <span className="block text-cyan-200">turn into</span>
                 <span className="block">innovation.</span>
               </h1>
               <p className="mt-8 max-w-xl text-base leading-8 text-slate-400 md:text-lg">A hands-on space for students to collaborate, experiment, and build working solutions with the SQUAD Club community.</p>
@@ -143,7 +146,7 @@ export function OngoingEventsPage() {
               <div className="absolute inset-12 rounded-full bg-cyan-400/15 blur-[90px]" />
               <div className="codex-hero-frame relative overflow-hidden rounded-[2rem] border border-cyan-200/20 bg-[#07121d]/70 p-6 shadow-[0_0_70px_rgba(34,211,238,0.12)] backdrop-blur-xl sm:p-10">
                 <div className="mb-7 flex items-center justify-between text-[10px] font-mono uppercase tracking-widest text-slate-500"><span>CODX_SYS / 02</span><span className="text-cyan-300">● live</span></div>
-                <img src="/codex-2-logo.png" alt="CODEX 2.0 official logo" className="relative w-full object-contain" />
+                <div className="relative w-full overflow-hidden whitespace-nowrap py-8 text-center text-[clamp(2.25rem,7vw,5rem)] font-black uppercase leading-none tracking-[-0.09em] text-white drop-shadow-[0_0_24px_rgba(103,232,249,0.6)]">CODEX 2.0</div>
                 <div className="mt-8 flex items-center justify-between border-t border-white/10 pt-5 text-[10px] font-mono uppercase tracking-widest text-slate-500"><span>Creative protocol active</span><span className="text-cyan-200">22.09 // MLRIT</span></div>
               </div>
             </motion.div>
@@ -152,13 +155,13 @@ export function OngoingEventsPage() {
 
         <section id="about" className="relative border-y border-white/10 px-6 py-24 md:px-12 md:py-32"><div className="mx-auto grid max-w-7xl gap-12 lg:grid-cols-[0.7fr_1.3fr]"><div><p className="text-[10px] font-mono uppercase tracking-[0.3em] text-cyan-300">01 / The brief</p><h2 className="mt-5 text-4xl font-bold tracking-tight sm:text-6xl">Build what<br /><span className="text-slate-500">matters.</span></h2></div><p className="max-w-3xl text-lg leading-9 text-slate-400">CODEX 2.0 is a hackathon conducted by the SQUAD Club at MLRIT. It brings together students interested in technology, innovation, coding, problem-solving, and creative development. Participants get the opportunity to collaborate, develop ideas, build solutions, and showcase their technical and creative abilities in a competitive hackathon environment.<br /><br />The event emphasizes innovation, technology, problem-solving, teamwork, creativity, building real solutions, learning, and experimentation.</p></div></section>
 
-        <section className="px-6 py-24 md:px-12 md:py-32"><div className="mx-auto max-w-7xl"><div className="mb-14 flex items-end justify-between gap-6"><div><p className="text-[10px] font-mono uppercase tracking-[0.3em] text-cyan-300">02 / What we value</p><h2 className="mt-5 text-4xl font-bold tracking-tight sm:text-6xl">The build<br /><span className="text-slate-500">mindset.</span></h2></div><span className="hidden text-right text-xs font-mono uppercase tracking-widest text-slate-500 md:block">Six signals<br />one direction</span></div><div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{highlights.map(({ icon: Icon, label, copy }, index) => <motion.article key={label} initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.06 }} className="codex-card group relative rounded-2xl border border-white/10 bg-white/[0.025] p-6 transition duration-300 hover:-translate-y-1 hover:border-cyan-300/40 hover:bg-cyan-300/[0.06]"><Icon className="h-6 w-6 text-cyan-300 transition group-hover:scale-110" /><h3 className="mt-12 text-xl font-semibold">{label}</h3><p className="mt-3 text-sm leading-7 text-slate-500">{copy}</p><ChevronRight className="absolute bottom-6 right-6 h-4 w-4 text-white/20 transition group-hover:translate-x-1 group-hover:text-cyan-300" /></motion.article>)}</div></div></section>
+        <section className="px-6 py-24 md:px-12 md:py-32"><div className="mx-auto max-w-7xl"><div className="mb-14 flex items-end justify-between gap-6"><div><p className="text-[10px] font-mono uppercase tracking-[0.3em] text-cyan-300">02 / What we value</p><h2 className="mt-5 text-4xl font-bold tracking-tight sm:text-6xl">The build<br /><span className="text-slate-500">mindset.</span></h2></div><span className="hidden text-right text-xs font-mono uppercase tracking-widest text-slate-500 md:block">Six signals<br />one direction</span></div><div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">{highlights.map(({ icon: Icon, label, copy }, index) => <motion.article key={label} initial={{ opacity: 0, y: 18 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: index * 0.06 }} className="codex-card group relative rounded-2xl border border-white/10 bg-white/[0.025] p-6 transition duration-300 hover:-translate-y-1 hover:border-cyan-300/40 hover:bg-cyan-300/[0.06]"><Icon className="h-6 w-6 text-cyan-300 transition group-hover:scale-110" /><h3 className="mt-12 text-xl font-semibold">{label}</h3><p className="mt-3 text-sm leading-7 text-slate-500">{copy}</p></motion.article>)}</div></div></section>
 
         <section className="border-y border-white/10 bg-[#06101a] px-6 py-24 md:px-12 md:py-32"><div className="mx-auto grid max-w-7xl gap-14 lg:grid-cols-[0.8fr_1.2fr]"><div><p className="text-[10px] font-mono uppercase tracking-[0.3em] text-cyan-300">03 / Coordinates</p><h2 className="mt-5 text-4xl font-bold tracking-tight sm:text-6xl">Meet at the<br /><span className="text-cyan-300">starting point.</span></h2></div><div className="grid gap-4 sm:grid-cols-2"><div className="rounded-2xl border border-white/10 bg-white/[0.03] p-7"><CalendarDays className="h-6 w-6 text-cyan-300" /><p className="mt-12 text-xs font-mono uppercase tracking-widest text-slate-500">Date</p><p className="mt-2 text-2xl font-semibold">22 September</p></div><div className="rounded-2xl border border-white/10 bg-white/[0.03] p-7"><MapPin className="h-6 w-6 text-cyan-300" /><p className="mt-12 text-xs font-mono uppercase tracking-widest text-slate-500">Venue</p><p className="mt-2 text-2xl font-semibold">MLRIT</p></div></div></div></section>
 
         <section className="px-6 py-24 md:px-12 md:py-32"><div className="mx-auto grid max-w-7xl gap-14 lg:grid-cols-2"><div><p className="text-[10px] font-mono uppercase tracking-[0.3em] text-cyan-300">04 / Parameters</p><h2 className="mt-5 text-4xl font-bold tracking-tight sm:text-6xl">Everything else<br /><span className="text-slate-500">is loading.</span></h2><p className="mt-7 max-w-lg text-slate-400 leading-8">Official hackathon details will be added here as they are confirmed. No assumptions. No noise. Just the information you need, when it is ready.</p></div><div className="divide-y divide-white/10 rounded-2xl border border-white/10 bg-white/[0.025]">{details.map(([label, value]) => <div key={label} className="flex items-center justify-between gap-5 px-6 py-5 sm:px-8"><span className="text-sm text-slate-400">{label}</span><span className="text-right text-sm font-medium text-white/80">{value}</span></div>)}</div></div></section>
 
-        <section className="px-6 pb-28 md:px-12 md:pb-40" id="registration"><div className="relative mx-auto max-w-7xl overflow-hidden rounded-[2rem] border border-cyan-300/25 bg-cyan-300/[0.06] p-8 sm:p-14"><div className="absolute -right-24 -top-24 h-72 w-72 rounded-full bg-cyan-300/15 blur-[90px]" /><div className="relative flex flex-col items-start justify-between gap-10 md:flex-row md:items-end"><div><p className="text-[10px] font-mono uppercase tracking-[0.3em] text-cyan-300">05 / Open channel</p><h2 className="mt-5 max-w-2xl text-4xl font-bold tracking-tight sm:text-6xl">Ready to turn<br />an idea into <span className="text-cyan-300">impact?</span></h2><p className="mt-5 text-slate-400">Registration link will be added when it is available.</p></div><a href="#" onClick={(event) => event.preventDefault()} className="group inline-flex shrink-0 items-center gap-3 rounded-full bg-white px-7 py-4 text-sm font-bold text-black transition hover:bg-cyan-300">Register now <ArrowUpRight className="h-4 w-4 transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5" /></a></div></div></section>
+        <section className="px-6 pb-28 md:px-12 md:pb-40" id="registration"><div className="relative mx-auto max-w-7xl overflow-hidden rounded-[2rem] border border-cyan-300/25 bg-cyan-300/[0.06] p-8 sm:p-14"><div className="absolute -right-24 -top-24 h-72 w-72 rounded-full bg-cyan-300/15 blur-[90px]" /><div className="relative flex flex-col items-start justify-between gap-10 md:flex-row md:items-end"><div><p className="text-[10px] font-mono uppercase tracking-[0.3em] text-cyan-300">05 / Open channel</p><h2 className="mt-5 max-w-2xl text-4xl font-bold tracking-tight sm:text-6xl">Ready to turn<br />an idea into <span className="text-cyan-300">impact?</span></h2><p className="mt-5 text-slate-400">{alreadyRegistered ? "Your registration has been marked as complete." : registrationStarted ? "After submitting the form, return here and confirm your registration." : "Complete the official registration form to join CODEX 2.0."}</p></div>{alreadyRegistered ? <div className="inline-flex shrink-0 items-center gap-3 rounded-full border border-cyan-300/40 bg-cyan-300/15 px-7 py-4 text-sm font-bold text-cyan-100">Already registered <Check className="h-4 w-4" /></div> : registrationStarted ? <button type="button" onClick={() => setAlreadyRegistered(true)} className="group inline-flex shrink-0 items-center gap-3 rounded-full bg-white px-7 py-4 text-sm font-bold text-black transition hover:bg-cyan-300">I’ve registered <Check className="h-4 w-4 transition group-hover:scale-110" /></button> : <a href={REGISTRATION_URL} target="_blank" rel="noreferrer" onClick={() => setRegistrationStarted(true)} className="group inline-flex shrink-0 items-center gap-3 rounded-full bg-white px-7 py-4 text-sm font-bold text-black transition hover:bg-cyan-300">Register now <ArrowUpRight className="h-4 w-4 transition group-hover:translate-x-0.5 group-hover:-translate-y-0.5" /></a>}</div></div></section>
 
         <footer className="border-t border-white/10 px-6 py-12 md:px-12"><div className="mx-auto flex max-w-7xl flex-col justify-between gap-6 text-xs font-mono uppercase tracking-widest text-slate-600 sm:flex-row"><span>CODEX 2.0 // SQUAD CLUB</span><span>Contact details coming soon</span><Link href="/events" className="text-slate-400 transition hover:text-cyan-300">Back to events <Check className="ml-1 inline h-3 w-3" /></Link></div></footer>
       </div>
